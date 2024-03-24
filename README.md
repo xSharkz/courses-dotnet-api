@@ -4,7 +4,7 @@ This project is an API for managing courses.
 
 ## Installation
 
-Before getting started, ensure that you have .NET SDK 8 installed. You can download and install the SDK from [here](https://dotnet.microsoft.com/download/dotnet/8).
+Before getting started, ensure that you have .NET SDK 8 installed. You can download and install the SDK from [here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
 
 To verify if you have the SDK 8 installed, run the following command in your terminal:
 
@@ -25,7 +25,7 @@ git clone https://github.com/IDWM/courses-dotnet-api.git
 2. Navigate to the project folder:
 
 ```
-cd course-api-project
+cd courses-dotnet-api
 ```
 
 3. Restore the project dependencies:

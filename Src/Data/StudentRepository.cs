@@ -12,12 +12,12 @@ public class StudentRepository : IStudentRepository
         _dataContext = dataContext;
     }
 
-    public async Task AddStudentAsync(Student student)
+    public async Task<bool> SaveChangesAsync()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> DeleteStudentByIdAsync(int id)
+    public async Task AddStudentAsync(Student student)
     {
         throw new NotImplementedException();
     }
@@ -37,12 +37,12 @@ public class StudentRepository : IStudentRepository
         throw new NotImplementedException();
     }
 
-    public async Task<bool> SaveChangesAsync()
+    public async Task<bool> UpdateStudentByIdAsync(int id, Student updateStudent)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> UpdateStudentByIdAsync(int id, Student updateStudent)
+    public async Task<bool> DeleteStudentByIdAsync(int id)
     {
         throw new NotImplementedException();
     }

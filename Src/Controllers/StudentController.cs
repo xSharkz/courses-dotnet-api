@@ -16,30 +16,68 @@ public class StudentController : BaseApiController
     [HttpPost]
     public async Task<IResult> CreateStudent(Student student)
     {
-        return TypedResults.Ok();
+        Student? result = await _studentRepository.GetStudentByRutAsync(student.Rut);
+
+        if (result is not null)
+            return TypedResults.BadRequest("Student already exists");
+
+        await _studentRepository.AddStudentAsync(student);
+
+        bool saveChanges = await _studentRepository.SaveChangesAsync();
+
+        if (!saveChanges)
+            return TypedResults.BadRequest("An error occurred while creating the student");
+
+        return TypedResults.Ok("Student created successfully");
     }
 
     [HttpGet]
     public async Task<IResult> GetStudents()
     {
-        return TypedResults.Ok();
+        IEnumerable<Student> result = await _studentRepository.GetStudentsAsync();
+
+        return TypedResults.Ok(result);
     }
 
     [HttpGet("{id}")]
     public async Task<IResult> GetStudentById(int id)
     {
-        return TypedResults.Ok();
+        Student? result = await _studentRepository.GetStudentByIdAsync(id);
+        if (result is null)
+            return TypedResults.NotFound("Student not found");
+
+        return TypedResults.Ok(result);
     }
 
     [HttpPut("{id}")]
     public async Task<IResult> UpdateStudent(int id, Student student)
     {
-        return TypedResults.Ok();
+        bool result = await _studentRepository.UpdateStudentByIdAsync(id, student);
+
+        if (!result)
+            return TypedResults.NotFound("Student not found");
+
+        result = await _studentRepository.SaveChangesAsync();
+
+        if (!result)
+            return TypedResults.BadRequest("An error occurred while updating the student");
+
+        return TypedResults.Ok("Student updated successfully");
     }
 
     [HttpDelete("{id}")]
     public async Task<IResult> DeleteStudent(int id)
     {
-        return TypedResults.Ok();
+        bool result = await _studentRepository.DeleteStudentByIdAsync(id);
+
+        if (!result)
+            return TypedResults.NotFound("Student not found");
+
+        result = await _studentRepository.SaveChangesAsync();
+
+        if (!result)
+            return TypedResults.BadRequest("An error occurred while deleting the student");
+
+        return TypedResults.Ok("Student deleted successfully");
     }
 }

@@ -1,5 +1,6 @@
 using courses_dotnet_api.Src.Interfaces;
 using courses_dotnet_api.Src.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace courses_dotnet_api.Src.Data;
 
@@ -14,36 +15,56 @@ public class StudentRepository : IStudentRepository
 
     public async Task<bool> SaveChangesAsync()
     {
-        throw new NotImplementedException();
+        return 0 < await _dataContext.SaveChangesAsync();
     }
 
     public async Task AddStudentAsync(Student student)
     {
-        throw new NotImplementedException();
+        await _dataContext.Students.AddAsync(student);
     }
 
     public async Task<Student?> GetStudentByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _dataContext.Students.FindAsync(id);
     }
 
     public async Task<Student?> GetStudentByRutAsync(string rut)
     {
-        throw new NotImplementedException();
+        return await _dataContext.Students.FirstOrDefaultAsync(x => x.Rut == rut);
     }
 
     public async Task<IEnumerable<Student>> GetStudentsAsync()
     {
-        throw new NotImplementedException();
+        return await _dataContext.Students.ToListAsync();
     }
 
     public async Task<bool> UpdateStudentByIdAsync(int id, Student updateStudent)
     {
-        throw new NotImplementedException();
+        var student = await GetStudentByIdAsync(id);
+
+        if (student is null)
+            return false;
+
+        student.Name = updateStudent.Name;
+        student.Email = updateStudent.Email;
+
+        return true;
     }
 
     public async Task<bool> DeleteStudentByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var student = await GetStudentByIdAsync(id);
+
+        if (student is null)
+            return false;
+
+        _dataContext.Students.Remove(student);
+
+        return true;
+    }
+
+    public async Task<IEnumerable<Student>> GetAllStudentsByName(string name)
+    {
+        return await _dataContext.Students.Where(x => x.Name.Contains(name)).ToListAsync();
     }
 }

@@ -484,3 +484,5 @@ $RECYCLE.BIN/
 *.swp
 
 courses_dotnet_api.db
+courses_dotnet_api.db-shm
+courses_dotnet_api.db-wal

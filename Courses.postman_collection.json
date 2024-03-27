@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e08a8125-a5ec-455f-9801-ce481afa7b38",
+		"_postman_id": "42eefaef-da01-4d87-808c-50d6e66791d2",
 		"name": "Courses",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "25678350"
@@ -74,7 +74,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Otro Nombre\",\r\n    \"email\": \"correo@gmail.com\"\r\n}",
+					"raw": "{\r\n    \"rut\": \"20.416.699-4\",\r\n    \"name\": \"Otro Nombre\",\r\n    \"email\": \"correo@gmail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

@@ -74,7 +74,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"rut\": \"12.345.678-9\",\r\n    \"name\": \"Otro Nombre\",\r\n    \"email\": \"correo@gmail.com\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Otro Nombre\",\r\n    \"email\": \"correo@gmail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

@@ -1,16 +1,20 @@
-using courses_dotnet_api.Src.Interfaces;
+using AutoMapper;
+using courses_dotnet_api.Src.DTOs;
 using courses_dotnet_api.Src.Models;
 using Microsoft.EntityFrameworkCore;
+using courses_dotnet_api.Src.Interfaces;
 
 namespace courses_dotnet_api.Src.Data;
 
 public class StudentRepository : IStudentRepository
 {
     private readonly DataContext _dataContext;
+    private readonly IMapper _mapper;
 
-    public StudentRepository(DataContext dataContext)
+    public StudentRepository(DataContext dataContext, IMapper mapper)
     {
         _dataContext = dataContext;
+        _mapper = mapper;
     }
 
     public async Task<bool> SaveChangesAsync()
@@ -18,42 +22,45 @@ public class StudentRepository : IStudentRepository
         return 0 < await _dataContext.SaveChangesAsync();
     }
 
-    public async Task AddStudentAsync(Student student)
+    public async Task AddStudentAsync(CreateStudentDto createStudentDto)
     {
+        Student student = _mapper.Map<Student>(createStudentDto);
         await _dataContext.Students.AddAsync(student);
     }
 
-    public async Task<Student?> GetStudentByIdAsync(int id)
+    public async Task<StudentDto?> GetStudentByIdAsync(int id)
     {
-        return await _dataContext.Students.FindAsync(id);
+        Student? student = await _dataContext.Students.FindAsync(id);
+        return _mapper.Map<StudentDto>(student);
     }
 
-    public async Task<Student?> GetStudentByRutAsync(string rut)
+    public async Task<StudentDto?> GetStudentByRutAsync(string rut)
     {
-        return await _dataContext.Students.FirstOrDefaultAsync(x => x.Rut == rut);
+        Student? student = await _dataContext.Students.FirstOrDefaultAsync(s => s.Rut == rut);
+        return _mapper.Map<StudentDto>(student);
     }
 
-    public async Task<IEnumerable<Student>> GetStudentsAsync()
+    public async Task<IEnumerable<StudentDto>> GetStudentsAsync()
     {
-        return await _dataContext.Students.ToListAsync();
+        IEnumerable<Student> students = await _dataContext.Students.ToListAsync();
+        return _mapper.Map<IEnumerable<StudentDto>>(students);
     }
 
-    public async Task<bool> UpdateStudentByIdAsync(int id, Student updateStudent)
+    public async Task<bool> UpdateStudentByIdAsync(int id, UpdateStudentDto updateStudentDto)
     {
-        var student = await GetStudentByIdAsync(id);
+        Student? student = await _dataContext.Students.FindAsync(id);
 
         if (student is null)
             return false;
-
-        student.Name = updateStudent.Name;
-        student.Email = updateStudent.Email;
+        
+        _mapper.Map(updateStudentDto, student);
 
         return true;
     }
 
     public async Task<bool> DeleteStudentByIdAsync(int id)
     {
-        var student = await GetStudentByIdAsync(id);
+        Student? student = await _dataContext.Students.FindAsync(id);
 
         if (student is null)
             return false;
@@ -61,10 +68,5 @@ public class StudentRepository : IStudentRepository
         _dataContext.Students.Remove(student);
 
         return true;
-    }
-
-    public async Task<IEnumerable<Student>> GetAllStudentsByName(string name)
-    {
-        return await _dataContext.Students.Where(x => x.Name.Contains(name)).ToListAsync();
     }
 }

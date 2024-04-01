@@ -1,14 +1,14 @@
-using courses_dotnet_api.Src.Models;
+using courses_dotnet_api.Src.DTOs;
 
 namespace courses_dotnet_api.Src.Interfaces;
 
 public interface IStudentRepository
 {
     Task<bool> SaveChangesAsync();
-    Task AddStudentAsync(Student student);
-    Task<Student?> GetStudentByIdAsync(int id);
-    Task<Student?> GetStudentByRutAsync(string rut);
-    Task<IEnumerable<Student>> GetStudentsAsync();
-    Task<bool> UpdateStudentByIdAsync(int id, Student updateStudent);
+    Task AddStudentAsync(CreateStudentDto createStudentDto);
+    Task<StudentDto?> GetStudentByIdAsync(int id);
+    Task<StudentDto?> GetStudentByRutAsync(string rut);
+    Task<IEnumerable<StudentDto>> GetStudentsAsync();
+    Task<bool> UpdateStudentByIdAsync(int id, UpdateStudentDto updateStudentDto);
     Task<bool> DeleteStudentByIdAsync(int id);
 }

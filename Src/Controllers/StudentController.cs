@@ -1,5 +1,5 @@
+using courses_dotnet_api.Src.DTOs;
 using courses_dotnet_api.Src.Interfaces;
-using courses_dotnet_api.Src.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace courses_dotnet_api.Src.Controllers;
@@ -14,14 +14,14 @@ public class StudentController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<IResult> CreateStudent(Student student)
+    public async Task<IResult> CreateStudent(CreateStudentDto createStudentDto)
     {
-        Student? result = await _studentRepository.GetStudentByRutAsync(student.Rut);
+        StudentDto? student = await _studentRepository.GetStudentByRutAsync(createStudentDto.Rut);
 
-        if (result is not null)
-            return TypedResults.BadRequest("Student already exists");
+        if (student is not null)
+            return TypedResults.BadRequest($"The student with RUT {createStudentDto.Rut} already exists");
 
-        await _studentRepository.AddStudentAsync(student);
+        await _studentRepository.AddStudentAsync(createStudentDto);
 
         bool saveChanges = await _studentRepository.SaveChangesAsync();
 
@@ -34,25 +34,28 @@ public class StudentController : BaseApiController
     [HttpGet]
     public async Task<IResult> GetStudents()
     {
-        IEnumerable<Student> result = await _studentRepository.GetStudentsAsync();
+        IEnumerable<StudentDto> students = await _studentRepository.GetStudentsAsync();
 
-        return TypedResults.Ok(result);
+        return TypedResults.Ok(students);
     }
 
     [HttpGet("{id}")]
     public async Task<IResult> GetStudentById(int id)
     {
-        Student? result = await _studentRepository.GetStudentByIdAsync(id);
-        if (result is null)
+        StudentDto? student = await _studentRepository.GetStudentByIdAsync(id);
+        if (student is null)
             return TypedResults.NotFound("Student not found");
 
-        return TypedResults.Ok(result);
+        return TypedResults.Ok(student);
     }
 
     [HttpPut("{id}")]
-    public async Task<IResult> UpdateStudent(int id, Student student)
+    public async Task<IResult> UpdateStudent(int id, UpdateStudentDto updateStudentDto)
     {
-        bool result = await _studentRepository.UpdateStudentByIdAsync(id, student);
+        if (ModelState.IsValid is false)
+            return TypedResults.BadRequest();
+            
+        bool result = await _studentRepository.UpdateStudentByIdAsync(id, updateStudentDto);
 
         if (!result)
             return TypedResults.NotFound("Student not found");

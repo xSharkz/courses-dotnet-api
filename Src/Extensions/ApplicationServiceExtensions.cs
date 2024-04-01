@@ -16,6 +16,7 @@ public static class ApplicationServiceExtensions
         {
             options.UseSqlite(config.GetConnectionString("DefaultConnection"));
         });
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddScoped<IStudentRepository, StudentRepository>();
 
         return services;

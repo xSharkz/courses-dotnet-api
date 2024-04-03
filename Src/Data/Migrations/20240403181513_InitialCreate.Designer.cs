@@ -10,7 +10,7 @@ using courses_dotnet_api.Src.Data;
 namespace courses_dotnet_api.Src.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240401014155_InitialCreate")]
+    [Migration("20240403181513_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,9 +33,13 @@ namespace courses_dotnet_api.Src.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("BLOB");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
 
                     b.Property<string>("Rut")
                         .IsRequired()

@@ -1,8 +1,8 @@
 using AutoMapper;
 using courses_dotnet_api.Src.DTOs;
+using courses_dotnet_api.Src.Interfaces;
 using courses_dotnet_api.Src.Models;
 using Microsoft.EntityFrameworkCore;
-using courses_dotnet_api.Src.Interfaces;
 
 namespace courses_dotnet_api.Src.Data;
 
@@ -40,6 +40,20 @@ public class StudentRepository : IStudentRepository
         return _mapper.Map<StudentDto>(student);
     }
 
+    public async Task<StudentDto?> GetStudentByEmailAsync(string email)
+    {
+        Student? student = await _dataContext.Students.FirstOrDefaultAsync(s => s.Email == email);
+        return _mapper.Map<StudentDto>(student);
+    }
+
+    public async Task<StudentDto?> GetStudentByRutOrEmailAsync(string rut, string email)
+    {
+        Student? student = await _dataContext.Students.FirstOrDefaultAsync(s =>
+            s.Rut == rut || s.Email == email
+        );
+        return _mapper.Map<StudentDto>(student);
+    }
+
     public async Task<IEnumerable<StudentDto>> GetStudentsAsync()
     {
         IEnumerable<Student> students = await _dataContext.Students.ToListAsync();
@@ -52,7 +66,7 @@ public class StudentRepository : IStudentRepository
 
         if (student is null)
             return false;
-        
+
         _mapper.Map(updateStudentDto, student);
 
         return true;

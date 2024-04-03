@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"rut\":      \"20.416.699-4\",\r\n    \"name\":     \"Jorge Rivera\",\r\n    \"email\":    \"jorge.rivera01@alumnos.ucn.cl\",\r\n    \"password\": \"password\"\r\n}",
+					"raw": "{\r\n    \"name\":     \"Jorge Rivera\",\r\n    \"email\":    \"jorge.rivera01@alumnos.ucn.cl\",\r\n    \"password\": \"password\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -107,6 +107,33 @@
 					"path": [
 						"student",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register an account",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"rut\": \"204166994\",\r\n    \"name\": \"Jorge Rivera\",\r\n    \"email\": \"jorge.rivera01@alumnos.ucn.cl\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api}}/account/register",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"account",
+						"register"
 					]
 				}
 			},

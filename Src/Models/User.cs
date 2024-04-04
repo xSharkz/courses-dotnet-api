@@ -1,6 +1,6 @@
 namespace courses_dotnet_api.Src.Models;
 
-public class Student
+public class User
 {
     public int Id { get; set; }
     public required string Rut { get; set; }

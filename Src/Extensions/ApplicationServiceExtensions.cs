@@ -35,8 +35,8 @@ public static class ApplicationServiceExtensions
                 };
             });
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITokenService, TokenService>();
 
         return services;

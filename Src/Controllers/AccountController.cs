@@ -1,4 +1,4 @@
-using courses_dotnet_api.Src.DTOs;
+using courses_dotnet_api.Src.DTOs.Account;
 using courses_dotnet_api.Src.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,47 +6,34 @@ namespace courses_dotnet_api.Src.Controllers;
 
 public class AccountController : BaseApiController
 {
-    private readonly IStudentRepository _studentRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IAccountRepository _accountRepository;
-    private readonly ITokenService _tokenService;
 
-    public AccountController(
-        IStudentRepository studentRepository,
-        IAccountRepository accountRepository,
-        ITokenService tokenService
-    )
+    public AccountController(IUserRepository userRepository, IAccountRepository accountRepository)
     {
-        _studentRepository = studentRepository;
+        _userRepository = userRepository;
         _accountRepository = accountRepository;
-        _tokenService = tokenService;
     }
 
     [HttpPost("register")]
-    public async Task<IResult> Register(RegisterStudentDto registerStudentDto)
+    public async Task<IResult> Register(RegisterDto registerDto)
     {
-        StudentDto? student = await _studentRepository.GetStudentByRutOrEmailAsync(
-            registerStudentDto.Rut,
-            registerStudentDto.Email
-        );
+        if (
+            await _userRepository.UserExistsByEmailAsync(registerDto.Email)
+            || await _userRepository.UserExistsByRutAsync(registerDto.Rut)
+        )
+        {
+            return TypedResults.BadRequest("User already exists");
+        }
 
-        if (student is not null)
-            return TypedResults.BadRequest("The user already exists");
+        await _accountRepository.AddAccountAsync(registerDto);
 
-        await _accountRepository.AddAccountAsync(registerStudentDto);
+        if (!await _accountRepository.SaveChangesAsync())
+        {
+            return TypedResults.BadRequest("Failed to save user");
+        }
 
-        bool saveChanges = await _studentRepository.SaveChangesAsync();
-
-        if (!saveChanges)
-            return TypedResults.BadRequest("An error ocurred while registering the account");
-
-        AccountDto accountDto =
-            new()
-            {
-                Rut = registerStudentDto.Rut,
-                Name = registerStudentDto.Name,
-                Email = registerStudentDto.Email,
-                Token = _tokenService.CreateToken(registerStudentDto.Rut)
-            };
+        AccountDto? accountDto = await _accountRepository.GetAccountAsync(registerDto.Email);
 
         return TypedResults.Ok(accountDto);
     }

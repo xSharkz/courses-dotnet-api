@@ -10,7 +10,7 @@ using courses_dotnet_api.Src.Data;
 namespace courses_dotnet_api.Src.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240403181513_InitialCreate")]
+    [Migration("20240404232406_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace courses_dotnet_api.Src.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
 
-            modelBuilder.Entity("courses_dotnet_api.Src.Models.Student", b =>
+            modelBuilder.Entity("courses_dotnet_api.Src.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -47,7 +47,7 @@ namespace courses_dotnet_api.Src.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Students");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

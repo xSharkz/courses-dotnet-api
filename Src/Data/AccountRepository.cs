@@ -40,10 +40,11 @@ public class AccountRepository : IAccountRepository
 
     public async Task<AccountDto?> GetAccountAsync(string email)
     {
+
         User? user = await _dataContext
             .Users.Where(student => student.Email == email)
             .FirstOrDefaultAsync();
-
+        
         if (user == null)
         {
             return null;
@@ -55,9 +56,10 @@ public class AccountRepository : IAccountRepository
                 Rut = user.Rut,
                 Name = user.Name,
                 Email = user.Email,
-                Token = _tokenService.CreateToken(user.Rut)
+                Token = _tokenService.CreateToken(user.Rut),
+                PasswordHash = user.PasswordHash,
+                PasswordSalt = user.PasswordSalt
             };
-
         return accountDto;
     }
 
